@@ -12,6 +12,7 @@
     <li>Métodos HTTP</li>
     <li>Status HTTP</li>
     <li>Arquitetura de Projetos e Design Patters</li>
-    <li>Trabalhar com Banco de Dados com Dotnet-EF</li>
+    <li>Trabalhar com Banco de Dados com Dotnet-EF e metodologia Code First</li>
     <li>Trabalhar com dados de transição(DTOs)</li>
+    <li>Criptografia de senha no banco de dados</li>
 </ul>

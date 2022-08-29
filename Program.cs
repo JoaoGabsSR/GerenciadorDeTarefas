@@ -1,12 +1,14 @@
 using System.Text;
 using GerenciadorDeTarefas;
 using GerenciadorDeTarefas.Data;
+using GerenciadorDeTarefas.Repository;
+using GerenciadorDeTarefas.Repository.Impl;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
-var keyInBytes = Encoding.ASCII.GetBytes(JwtKey.KeyGenerator());
+var keyInBytes = Encoding.ASCII.GetBytes(JwtKey.SecretKey);
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
@@ -36,6 +38,9 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddCors();
 
 builder.Services.AddDbContext<GerenciadorDeTarefasContext>(options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
+
+builder.Services.AddScoped<IUserRepository, UserRepositoryImpl>();
+builder.Services.AddScoped<ITaskRepository, TaskRepositoryImpl>();
 
 var app = builder.Build();
 

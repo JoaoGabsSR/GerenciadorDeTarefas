@@ -1,6 +1,8 @@
 using System.Text.RegularExpressions;
 using GerenciadorDeTarefas.Dtos;
 using GerenciadorDeTarefas.Models;
+using GerenciadorDeTarefas.Repository;
+using GerenciadorDeTarefas.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +14,7 @@ namespace GerenciadorDeTarefas.Controllers
     {
         private readonly ILogger<UserController> _logger;
 
-        public UserController(ILogger<UserController> logger)
+        public UserController(ILogger<UserController> logger, IUserRepository userRepository) : base(userRepository)
         {
             _logger = logger;
         }
@@ -40,6 +42,11 @@ namespace GerenciadorDeTarefas.Controllers
                     errors.Add("Email inválido");
                 }
 
+                if (_userRepository.GetUserByEmail(user.Email))
+                {
+                    errors.Add("Email já cadastrado");
+                }
+
                 if (string.IsNullOrEmpty(user.Password) || string.IsNullOrWhiteSpace(user.Password) || user.Email.Length < 4 && !regexPassword.Match(user.Password).Success)
                 {
                     errors.Add("Senha inválida");
@@ -54,7 +61,14 @@ namespace GerenciadorDeTarefas.Controllers
                     });
                 }
 
-                return Ok(user);
+                //Lower case email 
+                user.Email = user.Email.ToLower();
+                // Cryptographing password
+                user.Password = MD5Utils.GenerateHashMD5(user.Password);
+
+                _userRepository.Save(user);
+
+                return Ok(new { msg = "Usuário cadastrado com sucesso." });
             }
             catch (Exception e)
             {

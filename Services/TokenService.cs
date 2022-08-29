@@ -11,7 +11,7 @@ namespace GerenciadorDeTarefas.Services
         public static string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var keyInBytes = Encoding.ASCII.GetBytes(JwtKey.KeyGenerator());
+            var keyInBytes = Encoding.ASCII.GetBytes(JwtKey.SecretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

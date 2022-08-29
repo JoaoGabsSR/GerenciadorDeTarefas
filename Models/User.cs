@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace GerenciadorDeTarefas.Models
 {
     public class User
@@ -6,5 +8,8 @@ namespace GerenciadorDeTarefas.Models
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Task>? Tasks { get; private set; }
     }
 }
